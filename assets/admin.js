@@ -13,8 +13,9 @@
   };
 
   // ---------- field schemas ----------
-  // type: text | area | lines (one per line -> array) | csv (comma list -> array) | bool
+  // type: text | area | lines (one per line -> array) | csv (comma list -> array) | bool | image
   const PROFILE = [
+    ["photo", "Profile photo", "image", "A clear, square-ish headshot works best. It is resized automatically."],
     ["name", "Full name"], ["shortName", "Short name (logo / chatbot)"], ["title", "Job title"],
     ["location", "Location"], ["email", "Email"], ["phone", "Phone (leave empty to hide)"],
     ["linkedin", "LinkedIn URL"], ["github", "GitHub URL"],
@@ -28,8 +29,9 @@
       fields: [["title", "Title"], ["context", "Context (e.g. MSc Dissertation · University)"], ["year", "Year"],
         ["category", "Category (used for the filter buttons)"], ["featured", "Featured project", "bool"],
         ["description", "Short description", "area"], ["highlights", "Highlights / results", "lines", "One bullet per line"],
-        ["tech", "Tech stack", "csv", "Comma separated"], ["link", "Link (GitHub / demo, optional)"]],
-      blank: { title: "New project", context: "", year: "", category: "", featured: false, description: "", highlights: [], tech: [], link: "" },
+        ["tech", "Tech stack", "csv", "Comma separated"], ["link", "Link (GitHub / demo, optional)"],
+        ["image", "Project image (optional)", "image", "A screenshot, diagram or demo photo."]],
+      blank: { title: "New project", context: "", year: "", category: "", featured: false, description: "", highlights: [], tech: [], link: "", image: "" },
     },
     experience: {
       label: "Experience", one: "role", titleKey: "role", hint: "Jobs and internships, newest first.",
@@ -78,6 +80,17 @@
   }
   function fieldHTML([key, label, type = "text", help], obj, path) {
     const id = `${path}.${key}`;
+    if (type === "image") {
+      const v = obj[key] || "";
+      return `<div class="field"><label>${esc(label)}</label>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          ${v ? `<img src="${esc(v)}" alt="" style="width:88px;height:88px;object-fit:cover;border-radius:12px;border:1px solid var(--line)">`
+              : `<div style="width:88px;height:88px;border-radius:12px;border:1px dashed var(--line);display:grid;place-items:center;color:var(--muted);font-size:12px">No image</div>`}
+          <label class="btn">📷 ${v ? "Change" : "Upload"} image<input type="file" accept="image/*" hidden data-imgpath="${path}" data-key="${key}"></label>
+          ${v ? `<button class="btn" data-imgdel="${path}" data-key="${key}">Remove</button>` : ""}
+        </div>
+        <small>${esc(help || "")}${v && !v.startsWith("data:") ? ` · File: ${esc(v)}` : v ? " · Will be uploaded to GitHub when you publish" : ""}</small></div>`;
+    }
     if (type === "bool")
       return `<div class="field check"><input type="checkbox" id="${id}" data-path="${path}" data-key="${key}" data-type="bool" ${obj[key] ? "checked" : ""}><label for="${id}">${esc(label)}</label></div>`;
     const input = (type === "text")
@@ -195,6 +208,44 @@
       if (confirm("Discard all unpublished changes?")) { store.del("portfolio_draft"); data = JSON.parse(JSON.stringify(live)); changed(); render(); }
     }
   });
+  // ---------- images: resize in the browser, keep as a draft until publish ----------
+  function resizeImage(file, max = 900) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, max / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);   // flatten PNG transparency
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(img.src);
+        resolve(c.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = () => reject(new Error("Couldn't read that image"));
+      img.src = URL.createObjectURL(file);
+    });
+  }
+  $("panel").addEventListener("change", async e => {
+    const el = e.target;
+    if (!el.dataset.imgpath || !el.files[0]) return;
+    status("Processing image…");
+    try {
+      const keepOpen = el.closest(".item") && el.closest(".item").dataset.i;
+      target(el.dataset.imgpath)[el.dataset.key] = await resizeImage(el.files[0], el.dataset.key === "photo" ? 700 : 1200);
+      changed(); render();
+      if (keepOpen !== undefined) $("panel").querySelector(`.item[data-i="${keepOpen}"]`).classList.add("open");
+    } catch (err) { status("❌ " + err.message); }
+  });
+  $("panel").addEventListener("click", e => {
+    const b = e.target.closest("[data-imgdel]"); if (!b) return;
+    e.preventDefault();
+    const keepOpen = b.closest(".item") && b.closest(".item").dataset.i;
+    target(b.dataset.imgdel)[b.dataset.key] = "";
+    changed(); render();
+    if (keepOpen !== undefined) $("panel").querySelector(`.item[data-i="${keepOpen}"]`).classList.add("open");
+  });
+
   $("panel").addEventListener("change", e => {
     if (e.target.id !== "s-import") return;
     const f = e.target.files[0]; if (!f) return;
@@ -231,10 +282,28 @@
   $("b-publish").onclick = async () => {
     const s = settings();
     if (!s.owner || !s.repo || !s.token) { tab = "publish"; render(); status("Fill in the publish settings first."); return; }
-    const url = `https://api.github.com/repos/${s.owner}/${s.repo}/contents/data/portfolio.json`;
+    const api = (path) => `https://api.github.com/repos/${s.owner}/${s.repo}/contents/${path}`;
+    const url = api("data/portfolio.json");
     const headers = { Authorization: `Bearer ${s.token}`, Accept: "application/vnd.github+json" };
     status("Publishing…");
     try {
+      // 1. upload any new images (kept as data: URLs in the draft) and swap in their file paths
+      const slug = (t) => String(t || "image").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "image";
+      const jobs = [];
+      if ((data.profile || {}).photo?.startsWith("data:")) jobs.push([data.profile, "photo", "profile-photo"]);
+      (data.projects || []).forEach(pr => { if (pr.image?.startsWith("data:")) jobs.push([pr, "image", "project-" + slug(pr.title)]); });
+      for (const [n, [obj, key, name]] of jobs.entries()) {
+        status(`Uploading image ${n + 1} of ${jobs.length}…`);
+        const path = `assets/img/${name}-${Date.now()}.jpg`;
+        const r = await fetch(api(path), { method: "PUT", headers, body: JSON.stringify({
+          message: "Add image " + name, content: obj[key].split(",")[1], branch: s.branch }) });
+        if (!r.ok) throw new Error((await r.json()).message || r.status);
+        obj[key] = path;
+      }
+      if (jobs.length) changed();
+
+      // 2. save portfolio.json
+      status("Publishing…");
       const cur = await fetch(`${url}?ref=${encodeURIComponent(s.branch)}`, { headers });
       const sha = cur.ok ? (await cur.json()).sha : undefined;
       const text = JSON.stringify(data, null, 2) + "\n";
@@ -245,6 +314,7 @@
       live = JSON.parse(JSON.stringify(data));
       store.del("portfolio_draft");
       status("✅ Published! The live site updates in about a minute.");
+      render();
     } catch (err) {
       status("❌ Publish failed: " + err.message + " (check username, repo, branch and token)");
     }
