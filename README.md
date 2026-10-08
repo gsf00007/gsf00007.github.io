@@ -3,15 +3,11 @@
 100% free. No server, no database, no build step.
 
 ```
-portfolio/
-├── index.html            <- the portfolio page
-├── admin.html            <- the editor (add / edit / delete projects etc.)
-├── data/portfolio.json   <- ALL your content lives here
-└── assets/
-    ├── style.css
-    ├── app.js            <- draws the page from portfolio.json
-    ├── rag.js            <- the chatbot's RAG engine (runs in the visitor's browser)
-    └── admin.js          <- the editor logic + "Publish to GitHub"
+index.html                 <- the portfolio page (GitHub Pages root)
+admin.html                 <- the editor (add / edit / delete projects etc.)
+data/portfolio.json        <- ALL your content lives here
+assets/                    <- site styles and JavaScript
+rag-backend-optional/      <- optional Flask backend for AI-written answers
 ```
 
 ---
@@ -22,8 +18,7 @@ portfolio/
 2. Click **+ → New repository**.
    - Name it exactly **`YOUR-USERNAME.github.io`** (e.g. `fahadshaik07.github.io`). Your site will be `https://YOUR-USERNAME.github.io`
    - Public → **Create repository**.
-3. On the new repo page click **"uploading an existing file"**.
-   Drag in **everything inside** the `portfolio` folder (`index.html`, `admin.html`, `README.md`, and the `data` and `assets` folders) → **Commit changes**.
+3. Push this project to the repository's `main` branch. The site files (`index.html`, `admin.html`, `README.md`, `data/`, and `assets/`) are at the repository root; `rag-backend-optional/` contains the optional chatbot backend.
 4. Go to **Settings → Pages**. Under *Build and deployment*: Source = **Deploy from a branch**, Branch = **main**, folder **/ (root)** → **Save**.
 5. Wait 1–2 minutes and open `https://YOUR-USERNAME.github.io`. Done! 🎉
 
@@ -65,7 +60,7 @@ Put facts that aren't on the page in **Editor → Chatbot (RAG) → Extra knowle
 
 Free mode works forever at $0. If you later want Claude to *write* the answers:
 
-1. Deploy the `rag-chatbot` folder (Flask backend) to a free host such as **Render** (New → Web Service → connect the repo → Start command `gunicorn app:app` → add env var `ANTHROPIC_API_KEY`).
+1. Deploy the `rag-backend-optional` folder (Flask backend) to a host such as **Render**. Configure its root directory as `rag-backend-optional`, start command as `gunicorn app:app`, and set the `ANTHROPIC_API_KEY` environment variable there.
 2. Paste the backend URL (e.g. `https://fahad-rag.onrender.com`) into **Editor → Chatbot (RAG) → Backend URL** and publish.
 
 Note: hosting can be free, but **Claude API calls are pay-as-you-go** (Haiku costs a fraction of a cent per question). If the backend is asleep or fails, the site automatically falls back to free mode.
@@ -73,7 +68,6 @@ Note: hosting can be free, but **Claude API calls are pay-as-you-go** (Haiku cos
 ## Test locally
 
 ```bash
-cd portfolio
 python -m http.server 8000
 ```
 Open http://localhost:8000 (opening `index.html` by double-clicking won't work, because browsers block loading the JSON file that way).

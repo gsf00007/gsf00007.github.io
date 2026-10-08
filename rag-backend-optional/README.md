@@ -3,7 +3,7 @@
 A simple chatbot that answers questions using **your own documents** (the `data/` folder).
 
 ```
-rag-chatbot/
+rag-backend-optional/
 ├── app.py              <- web server (Flask)
 ├── rag.py              <- RAG brain: load -> chunk -> TF-IDF -> search -> Claude
 ├── templates/index.html<- chat page
@@ -15,8 +15,8 @@ rag-chatbot/
 ## Run it (Windows, Anaconda Prompt)
 
 ```bash
-# 1. go into the folder
-cd C:/Users/<you>/Desktop/rag-chatbot
+# 1. go into the backend folder in this repository
+cd C:/path/to/fahad-portfolio/rag-backend-optional
 
 # 2. make + activate an environment
 conda create -n ragbot python=3.11 -y
