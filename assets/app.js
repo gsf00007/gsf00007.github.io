@@ -51,6 +51,12 @@
       const hl = x.highlights || [];
       const shown = x.featured ? hl : hl.slice(0, 2);
       return `
+        if (p.photo) {
+    $("photo").src = p.photo;
+    $("photo").alt = "Photo of " + p.name;
+    $("photo-wrap").hidden = false;
+    document.querySelector(".hero").classList.add("has-photo");
+  }
       <article class="card ${x.featured && activeCat === "All" ? "featured" : ""}">
         <div class="meta"><span class="cat">${esc(x.category)}</span><span>${esc(x.year)}</span></div>
         <h3>${esc(x.title)}</h3>
