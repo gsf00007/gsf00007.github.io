@@ -1,0 +1,137 @@
+{
+  "profile": {
+    "name": "Gundlur Shaik Fahad",
+    "shortName": "Fahad",
+    "title": "AI / ML Engineer · Data Scientist",
+    "location": "Dubai, UAE",
+    "email": "fgundlur07@gmail.com",
+    "phone": "",
+    "linkedin": "https://linkedin.com/in/fahadshaik07",
+    "github": "",
+    "cv": "",
+    "availability": "Immediate joiner · Based in Dubai · Available for employment visa transfer",
+    "summary": "MSc AI & Machine Learning candidate at the University of Birmingham Dubai with 2 internships and 4 ML/DL projects, including an MSc dissertation building a real-time multi-camera AI surveillance and emergency-dispatch system. Experienced in computer vision, video analytics, deep learning, NLP, audio ML and statistical modelling. Skilled in Python, TensorFlow, PyTorch and scikit-learn, with MLOps exposure. Targeting AI/ML Engineer, Data Scientist or Junior AI Engineer roles in the UAE and GCC, in smart-city and public safety, healthcare, fintech and retail."
+  },
+  "skills": [
+    { "group": "Languages & Libraries", "items": ["Python", "SQL", "NumPy", "Pandas", "SciPy", "scikit-image", "Matplotlib", "Seaborn"] },
+    { "group": "ML / DL Frameworks", "items": ["TensorFlow", "Keras", "PyTorch", "scikit-learn"] },
+    { "group": "AI Specialisations", "items": ["Computer Vision", "Video Analytics", "Person Re-ID", "Pose Estimation", "CNNs", "RNNs", "LSTMs", "NLP", "Audio ML (MFCCs)", "Medical Image Segmentation", "Explainable AI (SHAP)"] },
+    { "group": "Data Science & MLOps", "items": ["Predictive Modelling", "Statistical Modelling (GMM / EM)", "Feature Engineering", "Data Preprocessing", "Data Augmentation", "Model Evaluation & Deployment", "Flask", "Socket.IO", "Twilio API", "Git"] }
+  ],
+  "experience": [
+    {
+      "role": "MLOps Intern — Respiratory Disease Detection (Healthcare AI)",
+      "org": "Virufy",
+      "period": "Nov 2025",
+      "points": [
+        "Built 2 deep learning architectures (CNN, RNN) for an open-source AI health initiative detecting respiratory diseases from cough audio.",
+        "Owned the end-to-end ML pipeline: audio preprocessing, MFCC feature extraction, data augmentation, model training and evaluation.",
+        "Gained hands-on MLOps exposure to model deployment workflows across Python, TensorFlow and PyTorch."
+      ]
+    },
+    {
+      "role": "Python Programming Intern",
+      "org": "InternPe",
+      "period": "May – Jun 2023",
+      "points": [
+        "Completed a 4-week programme solving real-world Python challenges in data manipulation, advanced libraries and applied techniques; earned a completion certificate."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "AI Surveillance: Multi-Camera Localisation, Threat Prioritisation & Emergency Dispatch",
+      "context": "MSc Dissertation · University of Birmingham Dubai",
+      "year": "2026",
+      "category": "Computer Vision",
+      "featured": true,
+      "description": "An end-to-end real-time AI surveillance system in Python (23 modules) that locates people across multiple cameras, detects gestures and collapses, prioritises threats and automatically dispatches emergency alerts.",
+      "highlights": [
+        "Multi-camera person localisation via homography calibration and cross-camera person Re-ID (ResNet).",
+        "Skeleton-based gesture and collapse detection (MediaPipe + LSTM-SVM) with a threat-prioritisation engine explained using SHAP.",
+        "Live Flask / Socket.IO dashboard and automated emergency dispatch via Twilio.",
+        "Collapse detection F1 0.91 (precision 1.00); alert threshold tuned from 0.90 to 0.75 to auto-dispatch 76% of collapses at a 4.1% full-system false-alarm rate.",
+        "Re-ID rank-1 accuracy of 87.1% on Market-1501, with WildTrack held out for evaluation (no training leakage)."
+      ],
+      "tech": ["Python", "MediaPipe", "LSTM + SVM", "ResNet", "SHAP", "Flask", "Socket.IO", "Twilio", "Homography"],
+      "link": ""
+    },
+    {
+      "title": "MRI Brain Segmentation — 2D & 3D Methods",
+      "context": "MSc · Computer Vision · University of Birmingham Dubai",
+      "year": "2025–2026",
+      "category": "Medical Imaging",
+      "featured": false,
+      "description": "Benchmarked three methods for multi-tissue brain MRI segmentation.",
+      "highlights": [
+        "Compared 2D Otsu, 2D K-Means and 3D K-Means, adding a 3×3×3 (27-voxel) majority filter for noise reduction.",
+        "Evaluated all methods with Dice Score; Otsu 2D achieved the best result (Dice 0.3821), outperforming clustering where label alignment is hard."
+      ],
+      "tech": ["Python", "NumPy", "scikit-image", "Matplotlib"],
+      "link": ""
+    },
+    {
+      "title": "Heart Disease Prediction Using Machine Learning",
+      "context": "B.Tech Final Year Project · GITAM University",
+      "year": "2023–2024",
+      "category": "Healthcare AI",
+      "featured": false,
+      "description": "Classification models on clinical data for clinical decision support.",
+      "highlights": [
+        "Built and compared 3 classification models (Logistic Regression, Decision Tree, Random Forest) with feature selection.",
+        "Evaluated on 4 metrics: accuracy, precision, recall and ROC-AUC."
+      ],
+      "tech": ["Python", "scikit-learn", "Pandas"],
+      "link": ""
+    },
+    {
+      "title": "Handwritten Digit Recognition Using CNN",
+      "context": "B.Tech Project · GITAM University",
+      "year": "2023",
+      "category": "Deep Learning",
+      "featured": false,
+      "description": "A convolutional neural network for 10-class handwritten digit classification.",
+      "highlights": [
+        "Designed a CNN with convolution, pooling and dense layers in TensorFlow/Keras.",
+        "Achieved high accuracy through hyperparameter tuning."
+      ],
+      "tech": ["Python", "TensorFlow", "Keras"],
+      "link": ""
+    },
+    {
+      "title": "RAG Portfolio Assistant",
+      "context": "Personal project",
+      "year": "2026",
+      "category": "NLP / LLMs",
+      "featured": false,
+      "description": "The chatbot on this website. It uses Retrieval-Augmented Generation to answer questions about my work from my own portfolio data.",
+      "highlights": [
+        "Splits the portfolio into passages and ranks them against each question with TF-IDF and cosine similarity, entirely in the browser.",
+        "Optional Flask + Claude API backend turns the retrieved passages into written answers."
+      ],
+      "tech": ["JavaScript", "TF-IDF", "Python", "Flask", "Claude API"],
+      "link": ""
+    }
+  ],
+  "education": [
+    {
+      "degree": "MSc Artificial Intelligence & Machine Learning",
+      "school": "University of Birmingham Dubai",
+      "period": "Sep 2025 – Sep 2026",
+      "details": "Relevant coursework: Mathematics for AI, Machine Learning, Deep Learning Architectures, NLP, Computer Vision, Explainable AI, Scalable AI Systems."
+    },
+    {
+      "degree": "B.Tech – Computer Science Engineering (AI & ML)",
+      "school": "GITAM University, India",
+      "period": "Sep 2020 – Apr 2024",
+      "details": "Relevant coursework: Python, Artificial Intelligence & Machine Learning, Data Structures & Algorithms."
+    }
+  ],
+  "certifications": ["Introduction to AI", "Python Data Structures", "Data Analysis with Python", "Linear Regression Modelling"],
+  "languages": ["English (Professional)", "Hindi", "Urdu", "Telugu"],
+  "chatbot": {
+    "apiUrl": "",
+    "greeting": "Hi! I'm Fahad's portfolio assistant. Ask me about his projects, skills, experience or education.",
+    "extraKnowledge": "Fahad is open to AI/ML Engineer, Data Scientist and Junior AI Engineer roles in the UAE and GCC.\n\nThe best way to contact Fahad is by email at fgundlur07@gmail.com or on LinkedIn."
+  }
+}

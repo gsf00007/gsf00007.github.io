@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%230f766e%22/><text x=%2250%22 y=%2268%22 font-size=%2256%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22700%22>F</text></svg>">
+<title>Fahad · AI / ML Engineer</title>
+<meta name="description" content="Portfolio of Gundlur Shaik Fahad, AI / ML Engineer and Data Scientist in Dubai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#" id="logo">Fahad</a>
+    <div class="nav-links">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <span class="pill" id="availability"></span>
+  <h1 id="name"></h1>
+  <p class="role" id="role"></p>
+  <p class="summary" id="summary"></p>
+  <div class="btns" id="hero-btns"></div>
+</header>
+
+<section id="projects"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="eyebrow">Work</div><h2>Projects</h2></div>
+    <div class="filters" id="filters"></div>
+  </div>
+  <div class="grid" id="project-grid"></div>
+</div></section>
+
+<section id="experience"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow">Career</div><h2>Experience</h2></div></div>
+  <div class="timeline" id="exp-list"></div>
+</div></section>
+
+<section id="skills"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow">Toolkit</div><h2>Skills</h2></div></div>
+  <div class="skills" id="skill-list"></div>
+</div></section>
+
+<section id="education"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow">Learning</div><h2>Education</h2></div></div>
+  <div class="timeline" id="edu-list"></div>
+  <div class="two" style="margin-top:18px">
+    <div class="card"><h3>Certifications</h3><div class="tags" id="certs"></div></div>
+    <div class="card"><h3>Languages</h3><div class="tags" id="langs"></div></div>
+  </div>
+</div></section>
+
+<footer id="contact"><div class="wrap">
+  <div class="eyebrow">Contact</div>
+  <h2>Let's work together.</h2>
+  <p class="summary" id="contact-line" style="color:var(--muted)"></p>
+  <div class="btns" id="contact-btns"></div>
+  <p class="small">Built with plain HTML/JS, hosted free on GitHub Pages. The chat assistant uses in-browser RAG over this portfolio.</p>
+</div></footer>
+
+<!-- chat widget -->
+<button class="chat-fab" id="chat-fab" aria-label="Open chat">💬 Ask my AI</button>
+<div class="chat-panel" id="chat-panel" role="dialog" aria-label="Portfolio assistant">
+  <div class="chat-top">
+    <div><b>Portfolio assistant</b><small>Answers from Fahad's portfolio (RAG)</small></div>
+    <button id="chat-close" aria-label="Close">×</button>
+  </div>
+  <div class="chat-log" id="chat-log"></div>
+  <div class="suggest" id="suggest"></div>
+  <form class="chat-form" id="chat-form">
+    <input id="chat-input" placeholder="Ask about projects, skills…" autocomplete="off">
+    <button>Send</button>
+  </form>
+</div>
+
+<script src="assets/rag.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%230f766e%22/><text x=%2250%22 y=%2268%22 font-size=%2256%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22sans-serif%22 font-weight=%22700%22>F</text></svg>">
+<meta name="robots" content="noindex">
+<title>Portfolio Editor</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  body { padding-bottom: 80px; }
+  .layout { display: grid; grid-template-columns: 200px 1fr; gap: 28px; padding-top: 28px; }
+  @media (max-width: 760px) { .layout { grid-template-columns: 1fr; } .side { position: static !important; flex-direction: row !important; flex-wrap: wrap; } }
+  .side { position: sticky; top: 84px; align-self: start; display: flex; flex-direction: column; gap: 4px; }
+  .side button { text-align: left; padding: 9px 12px; border-radius: 8px; border: 0; background: none; color: var(--muted); font: 500 14px var(--font-body); cursor: pointer; }
+  .side button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+  .panel h2 { font-size: 24px; margin-bottom: 4px; }
+  .panel .hint { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+  .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+  .field label { font: 600 13px var(--font-body); }
+  .field small { color: var(--muted); font-size: 12px; }
+  .field input[type=text], .field textarea {
+    width: 100%; padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--text); font: 14px/1.5 var(--font-body);
+  }
+  .field textarea { min-height: 84px; resize: vertical; }
+  .check { flex-direction: row; align-items: center; gap: 8px; }
+  .item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; }
+  .item-head { display: flex; align-items: center; gap: 8px; padding: 12px 14px; cursor: pointer; }
+  .item-head .t { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item-head button { border: 1px solid var(--line); background: var(--bg); color: var(--muted); border-radius: 7px; padding: 4px 9px; cursor: pointer; font-size: 13px; }
+  .item-head button.del:hover { color: #dc2626; border-color: #dc2626; }
+  .item-body { padding: 4px 14px 6px; border-top: 1px solid var(--line); display: none; }
+  .item.open .item-body { display: block; padding-top: 14px; }
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--surface);
+    border-top: 1px solid var(--line); padding: 12px 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .bar .status { flex: 1; color: var(--muted); font-size: 13px; min-width: 160px; }
+  .note { background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; font-size: 14px; margin-bottom: 18px; }
+  .test-out { background: var(--surface-2); border-radius: 10px; padding: 12px; white-space: pre-wrap; font-size: 14px; margin-top: 10px; display: none; }
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <span class="logo">Portfolio Editor</span>
+  <div class="nav-links" style="display:flex"><a href="index.html" target="_blank">View live site ↗</a></div>
+</div></nav>
+
+<div class="wrap layout">
+  <div class="side" id="tabs"></div>
+  <div class="panel" id="panel"></div>
+</div>
+
+<div class="bar">
+  <span class="status" id="status">Loading…</span>
+  <button class="btn" id="b-preview">Preview</button>
+  <button class="btn" id="b-download">Download JSON</button>
+  <button class="btn primary" id="b-publish">Publish to GitHub</button>
+</div>
+
+<script src="assets/rag.js"></script>
+<script src="assets/admin.js"></script>
+</body>
+</html>

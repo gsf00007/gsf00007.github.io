@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask Fahad's AI</title>
+<style>
+  :root { --bg:#0f1115; --panel:#181b22; --me:#3b6cf6; --bot:#232733; --text:#e8eaf0; --muted:#8b91a1; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--text);
+         display:flex; justify-content:center; height:100vh; }
+  .app { width:100%; max-width:720px; display:flex; flex-direction:column; padding:16px; }
+  h1 { font-size:1.2rem; margin:8px 0 4px; }
+  .sub { color:var(--muted); font-size:.85rem; margin-bottom:12px; }
+  #chat { flex:1; overflow-y:auto; background:var(--panel); border-radius:12px; padding:16px;
+          display:flex; flex-direction:column; gap:10px; }
+  .msg { max-width:85%; padding:10px 14px; border-radius:12px; line-height:1.45; white-space:pre-wrap; }
+  .me  { align-self:flex-end; background:var(--me); }
+  .bot { align-self:flex-start; background:var(--bot); }
+  .src { font-size:.75rem; color:var(--muted); margin-top:6px; }
+  form { display:flex; gap:8px; margin-top:12px; }
+  input { flex:1; padding:12px; border-radius:10px; border:1px solid #2c3140; background:var(--panel);
+          color:var(--text); font-size:1rem; }
+  button { padding:0 18px; border:0; border-radius:10px; background:var(--me); color:#fff;
+           font-size:1rem; cursor:pointer; }
+  button:disabled { opacity:.5; }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>💬 Ask Fahad's AI</h1>
+  <div class="sub">Answers come from documents in the <code>data/</code> folder (RAG).</div>
+  <div id="chat">
+    <div class="msg bot">Hi! Ask me anything about Fahad - his skills, projects or education.</div>
+  </div>
+  <form id="form">
+    <input id="input" placeholder="e.g. What projects has Fahad built?" autocomplete="off">
+    <button id="send">Send</button>
+  </form>
+</div>
+
+<script>
+  const chat = document.getElementById("chat");
+  const form = document.getElementById("form");
+  const input = document.getElementById("input");
+  const send = document.getElementById("send");
+  const history = [];   // kept in memory so follow-up questions work
+
+  function addMsg(text, who, sources) {
+    const div = document.createElement("div");
+    div.className = "msg " + who;
+    div.textContent = text;
+    if (sources && sources.length) {
+      const s = document.createElement("div");
+      s.className = "src";
+      s.textContent = "Sources: " + sources.map(x => `${x.source} (${x.score})`).join(", ");
+      div.appendChild(s);
+    }
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+    return div;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const message = input.value.trim();
+    if (!message) return;
+    addMsg(message, "me");
+    input.value = "";
+    send.disabled = true;
+    const thinking = addMsg("Thinking…", "bot");
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, history }),
+      });
+      const data = await res.json();
+      thinking.remove();
+      if (data.error) { addMsg("⚠️ " + data.error, "bot"); }
+      else {
+        addMsg(data.answer, "bot", data.sources);
+        history.push({ role: "user", content: message }, { role: "assistant", content: data.answer });
+      }
+    } catch (err) {
+      thinking.remove();
+      addMsg("⚠️ Could not reach the server. Is app.py running?", "bot");
+    }
+    send.disabled = false;
+    input.focus();
+  });
+</script>
+</body>
+</html>
