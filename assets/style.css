@@ -53,7 +53,7 @@ nav .wrap { display: flex; align-items: center; justify-content: space-between; 
 @media (max-width: 720px) { .nav-links { display: none; } }
 
 /* hero */
-.hero { padding: 88px 0 64px; }
+.hero { padding-top: 88px; padding-bottom: 64px; }
 .pill {
   display: inline-flex; align-items: center; gap: 8px; font-size: 13px;
   background: var(--accent-soft); color: var(--text); padding: 6px 12px; border-radius: 999px;
@@ -76,7 +76,24 @@ section { padding: 56px 0; border-top: 1px solid var(--line); }
 .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 26px; flex-wrap: wrap; }
 .sec-head h2 { font-size: 28px; }
 .eyebrow { font: 600 12px var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-
+/* hero photo */
+.hero.has-photo { display: grid; grid-template-columns: 1fr 300px; gap: 48px; align-items: center; }
+.photo-wrap { position: relative; }
+.photo-wrap::before {
+  content: ""; position: absolute; inset: 14px -14px -14px 14px; border-radius: 28px;
+  background: var(--accent-soft); border: 1px solid var(--accent); z-index: 0;
+}
+.photo-wrap img {
+  position: relative; z-index: 1; display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+  border-radius: 28px; box-shadow: var(--shadow); background: var(--surface-2);
+}
+@media (max-width: 820px) {
+  .hero.has-photo { grid-template-columns: 1fr; gap: 32px; padding-top: 48px; }
+  .hero { padding-top: 48px; }
+  .photo-wrap { order: -1; width: 180px; }
+  .photo-wrap img { aspect-ratio: 1; border-radius: 50%; }
+  .photo-wrap::before { border-radius: 50%; inset: 8px -8px -8px 8px; }
+}
 /* project filters + cards */
 .filters { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
@@ -90,6 +107,9 @@ section { padding: 56px 0; border-top: 1px solid var(--line); }
   padding: 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px;
 }
 .card.featured { grid-column: 1 / -1; border-color: var(--accent); }
+.card.has-img { padding-top: 0; overflow: hidden; }
+.card-img { display: block; width: calc(100% + 44px); margin: 0 -22px 6px; aspect-ratio: 16 / 9; object-fit: cover; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+.card.featured .card-img { aspect-ratio: auto; height: 300px; }
 .card .meta { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .card .cat { color: var(--accent); font-weight: 600; }
 .card h3 { font-size: 19px; }
