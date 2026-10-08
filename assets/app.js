@@ -22,7 +22,7 @@
   $("role").textContent = `${p.title} · ${p.location}`;
   $("summary").textContent = p.summary;
   $("availability").textContent = p.availability || "Open to opportunities";
-    if (p.photo) {
+  if (p.photo) {
     $("photo").src = p.photo;
     $("photo").alt = "Photo of " + p.name;
     $("photo-wrap").hidden = false;
@@ -57,7 +57,8 @@
     $("photo-wrap").hidden = false;
     document.querySelector(".hero").classList.add("has-photo");
   }
-      <article class="card ${x.featured && activeCat === "All" ? "featured" : ""}">
+      <article class="card ${x.featured && activeCat === "All" ? "featured" : ""} ${x.image ? "has-img" : ""}">
+        ${x.image ? `<img class="card-img" src="${esc(x.image)}" alt="${esc(x.title)}" loading="lazy">` : ""}
         <div class="meta"><span class="cat">${esc(x.category)}</span><span>${esc(x.year)}</span></div>
         <h3>${esc(x.title)}</h3>
         <div class="meta"><span>${esc(x.context)}</span></div>
