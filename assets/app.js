@@ -22,6 +22,12 @@
   $("role").textContent = `${p.title} · ${p.location}`;
   $("summary").textContent = p.summary;
   $("availability").textContent = p.availability || "Open to opportunities";
+    if (p.photo) {
+    $("photo").src = p.photo;
+    $("photo").alt = "Photo of " + p.name;
+    $("photo-wrap").hidden = false;
+    document.querySelector(".hero").classList.add("has-photo");
+  }
   if (!p.availability) $("availability").style.display = "none";
 
   const links = [
